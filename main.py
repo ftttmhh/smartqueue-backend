@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Body
+from fastapi import FastAPI, HTTPException, Body, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse
@@ -53,11 +53,13 @@ class StatusResponse(BaseModel):
 class TokenRequest(BaseModel):
     token: str
 
-@app.post("/queue/join", response_model=JoinResponse)
-def join_queue(req: JoinRequest):
+@app.post("/queue/join")
+async def join_queue(request: Request, data: JoinRequest):
+    user_agent = request.headers.get("user-agent", "")
+    print("User-Agent:", user_agent)
     queue = get_queue()
     token = f"T{len(queue)+1}"
-    entry = {"token": token, "name": req.name, "phone": req.phone, "service_type": req.service_type}
+    entry = {"token": token, "name": data.name, "phone": data.phone, "service_type": data.service_type}
     queue.append(entry)
     set_queue(queue)
     position = len(queue)
