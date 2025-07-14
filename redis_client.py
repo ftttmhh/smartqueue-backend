@@ -1,4 +1,3 @@
 import redis
 
-# Adjust host/port/db as needed for your environment
-redis_client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
+redis_client = redis.from_url('redis://default:AeJZAAIjcDEzMWNlMDVmOTdlMjU0MDczYTE3ZDljYTVhZDEwMjI0ZHAxMA@touching-goblin-57945.upstash.io:6379', decode_responses=True)
